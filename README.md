@@ -8,7 +8,7 @@ Author: Laurent Gaffie <laurent.gaffie@gmail.com >  https://g-laurent.blogspot.c
 
 ## Intro ##
 
-Responder is an LLMNR, NBT-NS and MDNS poisoner. 
+Responder - отравитель LLMNR, NBT-NS и MDNS. 
 
 ## Features ##
 
@@ -16,92 +16,94 @@ Responder is an LLMNR, NBT-NS and MDNS poisoner.
 
 - Built-in SMB Auth server.
 	
-Supports NTLMv1, NTLMv2 hashes with Extended Security NTLMSSP by default. Successfully tested from Windows 95 to Server 2022, Samba and Mac OSX Lion. Clear text password is supported for NT4, and LM hashing downgrade when the --lm option is set. If --disable-ess is set, extended session security will be disabled for NTLMv1 authentication. SMBv2 has also been implemented and is supported by default.
+Поддерживает хэши NTLMv1, NTLMv2 с расширенной безопасностью NTLMSSP по умолчанию. Успешно протестирован с Windows 95 до Server 2022, Samba и Mac OSX Lion. Для NT4 поддерживаются пароли с открытым текстом и понижение хэширования LM при установке опции --lm. Если задана опция --disable-ess, то для аутентификации NTLMv1 будет отключена расширенная защита сеанса. SMBv2 также реализован и поддерживается по умолчанию.
 
 - Built-in MSSQL Auth server.
 
-This server supports NTLMv1, LMv2 hashes. This functionality was successfully tested on Windows SQL Server 2005, 2008, 2012, 2019.
+Данный сервер поддерживает хэши NTLMv1, LMv2. Данная функциональность была успешно протестирована на серверах Windows SQL Server 2005, 2008, 2012, 2019.
 
 - Built-in HTTP Auth server.
 
-This server supports NTLMv1, NTLMv2 hashes *and* Basic Authentication. This server was successfully tested on IE 6 to IE 11, Edge, Firefox, Chrome, Safari.
+Данный сервер поддерживает хэши NTLMv1, NTLMv2 *и* базовую аутентификацию. Данный сервер был успешно протестирован на IE 6 - IE 11, Edge, Firefox, Chrome, Safari.
 
-Note: This module also works for WebDav NTLM authentication issued from Windows WebDav clients (WebClient). You can now send your custom files to a victim.
+Примечание: Данный модуль также работает для WebDav NTLM-аутентификации, выдаваемой Windows WebDav-клиентами (WebClient). Теперь вы можете отправлять жертве свои пользовательские файлы.
 
 - Built-in HTTPS Auth server.
 
-Same as above. The folder certs/ contains 2 default keys, including a dummy private key. This is *intentional*, the purpose is to have Responder working out of the box. A script was added in case you need to generate your own self signed key pair.
+Аналогично описанному выше. Папка certs/ содержит 2 ключа по умолчанию, включая фиктивный закрытый ключ. Это *намеренно*, цель - чтобы Responder работал из коробки. На случай, если вам понадобится сгенерировать собственную пару ключей с собственной подписью, был добавлен скрипт.
 
 - Built-in LDAP Auth server.
 
-This server supports NTLMSSP hashes and Simple Authentication (clear text authentication). This server was successfully tested on Windows Support tool "ldp" and LdapAdmin.
+Данный сервер поддерживает хэши NTLMSSP и простую аутентификацию (аутентификация открытым текстом). Данный сервер был успешно протестирован на Windows Support tool "ldp" и LdapAdmin.
 
 - Built-in DCE-RPC Auth server.
 
-This server supports NTLMSSP hashes. This server was successfully tested on Windows XP to Server 2019.
+Данный сервер поддерживает хэши NTLMSSP. Данный сервер был успешно протестирован на платформах Windows XP - Server 2019.
 
 - Built-in FTP, POP3, IMAP, SMTP Auth servers.
 
-This modules will collect clear text credentials.
+Эти модули собирают учетные данные в открытом виде.
 
 - Built-in DNS server.
 
-This server will answer type SRV and A queries. This is really handy when it's combined with ARP spoofing. 
+Этот сервер будет отвечать на запросы типа SRV и A. Это очень удобно в сочетании с ARP-спуфингом. 
 
 - Built-in WPAD Proxy Server.
 
-This module will capture all HTTP requests from anyone launching Internet Explorer on the network if they have "Auto-detect settings" enabled. This module is highly effective. You can configure your custom PAC script in Responder.conf and inject HTML into the server's responses. See Responder.conf.
+Этот модуль перехватывает все HTTP-запросы от всех, кто запускает Internet Explorer в сети, если у них включена функция "Автоопределение настроек". Этот модуль очень эффективен. Вы можете настроить свой собственный PAC-скрипт в файле Responder.conf и внедрять HTML в ответы сервера. См. раздел Responder.conf.
 
 - Browser Listener
 
-This module allows to find the PDC in stealth mode.
+Этот модуль позволяет обнаружить PDC в скрытом режиме.
 
 - Icmp Redirect
 
     python tools/Icmp-Redirect.py
 
-For MITM on Windows XP/2003 and earlier Domain members. This attack combined with the DNS module is pretty effective.
+Для MITM на Windows XP/2003 и более ранних версиях членов домена. Эта атака в сочетании с модулем DNS достаточно эффективна.
 
 - Rogue DHCP
 
     python tools/DHCP.py
 
-DHCP Inform Spoofing. Allows you to let the real DHCP Server issue IP addresses, and then send a DHCP Inform answer to set your IP address as a primary DNS server, and your own WPAD URL. To inject a DNS server, domain, route on all Windows version and any linux box, use -R
+DHCP Inform Spoofing. Позволяет выдать реальному DHCP-серверу IP-адреса, а затем отправить ответ DHCP Inform для установки вашего IP-адреса в качестве основного DNS-сервера и собственного WPAD URL. Для введения DNS-сервера, домена, маршрута во всех версиях Windows и в любом linux-комплексе используйте команду -R
 
 - Analyze mode.
 
-This module allows you to see NBT-NS, BROWSER, LLMNR, DNS requests on the network without poisoning any responses. Also, you can map domains, MSSQL servers, workstations passively, see if ICMP Redirects attacks are plausible on your subnet. 
+Этот модуль позволяет видеть NBT-NS, BROWSER, LLMNR, DNS-запросы в сети без отравления ответов. Также можно пассивно отобразить домены, MSSQL-серверы, рабочие станции, посмотреть, возможны ли атаки ICMP Redirects в вашей подсети. 
 
 ## Hashes ##
 
-All hashes are printed to stdout and dumped in a unique John Jumbo compliant file, using this format:
+Все хэши выводятся в stdout и сбрасываются в уникальный файл, совместимый с John Jumbo, в таком формате:
 
     (MODULE_NAME)-(HASH_TYPE)-(CLIENT_IP).txt
 
-Log files are located in the "logs/" folder. Hashes will be logged and printed only once per user per hash type, unless you are using the Verbose mode (-v).
+Файлы журнала располагаются в папке "logs/". Запись и печать хэшей будет производиться только один раз для каждого пользователя для каждого типа хэша, если только вы не используете режим Verbose (-v).
 
-- Responder will log all its activity to Responder-Session.log
-- Analyze mode will be logged to Analyzer-Session.log
-- Poisoning will be logged to Poisoners-Session.log
+- Responder будет записывать все свои действия в файл Responder-Session.log
+- Режим анализа будет записываться в файл Analyzer-Session.log
+- Отравление будет записываться в Poisoners-Session.log
 
-Additionally, all captured hashed are logged into an SQLite database which you can configure in Responder.conf
+Кроме того, все перехваченные хэши записываются в базу данных SQLite, которую можно настроить в файле Responder.conf
 
 
 ## Considerations ##
 
-- This tool listens on several ports: UDP 137, UDP 138, UDP 53, UDP/TCP 389,TCP 1433, UDP 1434, TCP 80, TCP 135, TCP 139, TCP 445, TCP 21, TCP 3141,TCP 25, TCP 110, TCP 587, TCP 3128, Multicast UDP 5355 and 5353.
+Соображения
 
-- If you run Samba on your system, stop smbd and nmbd and all other services listening on these ports.
+- Данный инструмент прослушивает несколько портов: UDP 137, UDP 138, UDP 53, UDP/TCP 389,TCP 1433, UDP 1434, TCP 80, TCP 135, TCP 139, TCP 445, TCP 21, TCP 3141,TCP 25, TCP 110, TCP 587, TCP 3128, Multicast UDP 5355 и 5353.
 
-- For Ubuntu users:
+- Если в вашей системе используется Samba, остановите smbd и nmbd, а также все остальные службы, прослушивающие эти порты.
 
-Edit this file /etc/NetworkManager/NetworkManager.conf and comment the line: `dns=dnsmasq`. Then kill dnsmasq with this command (as root): `killall dnsmasq -9`
+- Для пользователей Ubuntu:
 
-- Any rogue server can be turned off in Responder.conf.
+Отредактируйте этот файл /etc/NetworkManager/NetworkManager.conf и закомментируйте строку: `dns=dnsmasq`. Затем уничтожьте dnsmasq этой командой (от имени root): `killall dnsmasq -9`.
 
-- This tool is not meant to work on Windows.
+- Любой неавторизованный сервер может быть отключен в файле Responder.conf.
 
-- For OSX, please note: Responder must be launched with an IP address for the -i flag (e.g. -i YOUR_IP_ADDR). There is no native support in OSX for custom interface binding. Using -i en1 will not work. Also to run Responder with the best experience, run the following as root:
+- Данный инструмент не предназначен для работы под Windows.
+
+- Для OSX, пожалуйста, обратите внимание: Responder должен быть запущен с IP-адресом для флага -i (например, -i YOUR_IP_ADDR). В OSX нет встроенной поддержки привязки пользовательских интерфейсов. Использование флага -i en1 не будет работать. Кроме того, чтобы запустить Responder с наилучшими впечатлениями, выполните следующие действия от имени root:
 
     launchctl unload /System/Library/LaunchDaemons/com.apple.Kerberos.kdc.plist
 
@@ -111,77 +113,77 @@ Edit this file /etc/NetworkManager/NetworkManager.conf and comment the line: `dn
 
     launchctl unload /System/Library/LaunchDaemons/com.apple.netbiosd.plist
 
-## Usage ##
+## Использование ##
 
-First of all, please take a look at Responder.conf and tweak it for your needs.
+Прежде всего, ознакомьтесь с файлом Responder.conf и настройте его под свои нужды.
 
-Running the tool:
+Запуск инструмента:
 
-    ./Responder.py [options]
+    ./Responder.py [options].
 
-Typical Usage Example:
+Типичный пример использования:
 
     ./Responder.py -I eth0 -Pv
 
-Options:
+Опции:
 
-    --version             show program's version number and exit
-    -h, --help            show this help message and exit
-    -A, --analyze         Analyze mode. This option allows you to see NBT-NS,
-                        BROWSER, LLMNR requests without responding.
+    --version показать номер версии программы и выйти
+    -h, --help показать справочное сообщение и выйти
+    -A, --analyze Режим анализа. Эта опция позволяет просматривать NBT-NS,
+                        BROWSER, LLMNR запросы, не отвечая на них.
     -I eth0, --interface=eth0
-                        Network interface to use, you can use 'ALL' as a
-                        wildcard for all interfaces
+                        Сетевой интерфейс для использования, можно использовать 'ALL' в качестве
+                        подстановочный знак для всех интерфейсов
     -i 10.0.0.21, --ip=10.0.0.21
-                        Local IP to use (only for OSX)
+                        Используемый локальный IP-адрес (только для OSX)
     -6 2002:c0a8:f7:1:3ba8:aceb:b1a9:81ed, --externalip6=2002:c0a8:f7:1:3ba8:aceb:b1a9:81ed
-                        Poison all requests with another IPv6 address than
-                        Responder's one.
+                        Отравить все запросы с адресом IPv6, отличным от адреса
+                        адреса ответчика.
     -e 10.0.0.22, --externalip=10.0.0.22
-                        Poison all requests with another IP address than
-                        Responder's one.
-    -b, --basic           Return a Basic HTTP authentication. Default: NTLM
-    -d, --DHCP            Enable answers for DHCP broadcast requests. This
-                        option will inject a WPAD server in the DHCP response.
-                        Default: False
-    -D, --DHCP-DNS        This option will inject a DNS server in the DHCP
-                        response, otherwise a WPAD server will be added.
-                        Default: False
-    -w, --wpad            Start the WPAD rogue proxy server. Default value is
+                        Отравить все запросы с IP-адресом, отличным от адреса
+                        ответчика.
+    -b, --basic Возвращать базовую HTTP-аутентификацию. По умолчанию: NTLM
+    -d, --DHCP Включить ответы на широковещательные запросы DHCP. Эта
+                        опция будет вставлять WPAD-сервер в DHCP-ответ.
+                        По умолчанию: False
+    -D, --DHCP-DNS Эта опция будет включать DNS-сервер в DHCP-ответ.
+                        в ответ на запрос DHCP, в противном случае будет добавлен WPAD-сервер.
+                        По умолчанию: False
+    -w, --wpad Запуск неавторизованного прокси-сервера WPAD. Значение по умолчанию
                         False
     -u UPSTREAM_PROXY, --upstream-proxy=UPSTREAM_PROXY
-                        Upstream HTTP proxy used by the rogue WPAD Proxy for
-                        outgoing requests (format: host:port)
-    -F, --ForceWpadAuth   Force NTLM/Basic authentication on wpad.dat file
-                        retrieval. This may cause a login prompt. Default:
+                        Upstream HTTP-прокси, используемый неавторизованным WPAD-прокси для
+                        исходящих запросов (формат: host:port)
+    -F, --ForceWpadAuth Принудительная NTLM/Basic аутентификация при получении файла wpad.dat
+                        при получении файла wpad.dat. Это может привести к появлению запроса на вход в систему. По умолчанию:
                         False
-    -P, --ProxyAuth       Force NTLM (transparently)/Basic (prompt)
-                        authentication for the proxy. WPAD doesn't need to be
-                        ON. Default: False
-    --lm                  Force LM hashing downgrade for Windows XP/2003 and
-                        earlier. Default: False
-    --disable-ess         Force ESS downgrade. Default: False
-    -v, --verbose         Increase verbosity.
+    -P, --ProxyAuth Принудительная NTLM (прозрачно)/Basic (с подсказкой)
+                        аутентификации для прокси-сервера. WPAD не обязательно должен быть
+                        ON. По умолчанию: False
+    --lm Принудительное понижение хэширования LM для Windows XP/2003 и более ранних версий.
+                        более ранних версий. По умолчанию: False
+    --disable-ess Принудительное понижение уровня ESS. По умолчанию: False
+    -v, --verbose Усилить многословность.
 
 
 	
 
-## Donation ##
+## Пожертвование ##
 
-You can contribute to this project by donating to the following $XLM (Stellar Lumens) address:
+Вы можете внести свой вклад в этот проект, сделав пожертвование на следующий адрес $XLM (Stellar Lumens):
 
-"GCGBMO772FRLU6V4NDUKIEXEFNVSP774H2TVYQ3WWHK4TEKYUUTLUKUH"
+"GCGBMO772FRLU6V4NDUKIEXEFNVSP774H2TVYQ3WWHK4TEKYUUTLUKUH".
 
 Paypal:
 
 https://paypal.me/PythonResponder
 
 
-## Acknowledgments ##
+## Благодарности ##
 
-Late Responder development has been possible because of the donations received from individuals and companies.
+Разработка Late Responder стала возможной благодаря пожертвованиям, полученным от частных лиц и компаний.
 
-We would like to thanks those major sponsors:
+Мы хотели бы поблагодарить основных спонсоров:
 
 - SecureWorks: https://www.secureworks.com/
 
@@ -195,28 +197,28 @@ We would like to thanks those major sponsors:
 
 - Open-Sec: http://www.open-sec.com/
 
-- And all, ALL the pentesters around the world who donated to this project.
+- И все, ВСЕ пентестеры по всему миру, которые пожертвовали на этот проект.
 
-Thank you.
+Спасибо.
 
 
 ## Copyright ##
 
 NBT-NS/LLMNR Responder
 
-Responder, a network take-over set of tools created and maintained by Laurent Gaffie.
+Responder - набор инструментов для захвата сети, созданный и поддерживаемый Лораном Гаффи (Laurent Gaffie).
 
-email: laurent.gaffie@gmail.com
+e-mail: laurent.gaffie@gmail.com
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Эта программа является свободным программным обеспечением: вы можете распространять ее и/или модифицировать
+в соответствии с условиями Стандартной общественной лицензии GNU, опубликованной
+Фондом свободного программного обеспечения, либо версии 3 этой лицензии, либо
+(по вашему выбору) любой более поздней версии.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Эта программа распространяется в надежде, что она окажется полезной,
+но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемых гарантий
+товарности или пригодности для определенной цели.  См.
+GNU General Public License для получения более подробной информации.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Вы должны были получить копию Стандартной общественной лицензии GNU
+вместе с этой программой.  Если это не так, см. <http://www.gnu.org/licenses/>.
